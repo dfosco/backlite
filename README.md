@@ -31,4 +31,4 @@ npm run build
 
 ## License
 
-Do whatever you want with it. It's a colored rectangle.
+MIT
