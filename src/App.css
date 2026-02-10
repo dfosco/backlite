@@ -1,0 +1,237 @@
+.app {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  transition: background-color 0.05s ease-out;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Custom cursor - liquid glass */
+.custom-cursor {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+
+  /* Glass foundation */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(2px) saturate(180%);
+  -webkit-backdrop-filter: blur(2px) saturate(180%);
+  /* Depth and glow */
+  box-shadow:
+    0 0 0 1.6px rgba(0, 0, 0, 0.05),
+    0 8px 32px rgba(31, 38, 135, 0.05),
+    inset 0 4px 20px rgba(255, 255, 255, 0.3);
+
+  transition:
+    transform 0.1s ease-out,
+    box-shadow 0.2s ease-out,
+    background 0.2s ease-out;
+}
+
+/* Liquid shine highlight */
+.custom-cursor::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(0, 0) scale(1);
+  transition: transform 0.1s ease-out;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+    background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  box-shadow:
+    0 0 0 1.6px rgba(0, 0, 0, 0.05),
+    inset -10px -8px 0px -11px rgba(255, 255, 255, 1),
+    inset 0px -9px 0px -8px rgba(255, 255, 255, 1);
+  opacity: 0.6;
+}
+
+.custom-cursor.dragging { 
+  transform: translate(-16px, -16px) scale(1.2);
+  transition: transform 0.1s ease-out;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 8px 24px rgba(31, 38, 135, 0.08),
+    inset 0 3px 16px rgba(255, 255, 255, 0.3);
+}
+
+.custom-cursor.hidden {
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+}
+
+/* Navigation bar - liquid glass effect */
+.navbar {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(2px) saturate(180%);
+  -webkit-backdrop-filter: blur(2px) saturate(180%);
+  box-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.2),
+    inset 0 4px 20px rgba(255, 255, 255, 0.3);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    color 0.3s ease;
+  z-index: 100;
+  cursor: default;
+}
+
+/* Navbar shine highlight */
+.navbar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset -10px -8px 0px -11px rgba(255, 255, 255, 1),
+    inset 0px -9px 0px -8px rgba(255, 255, 255, 1);
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(1px) brightness(110%);
+}
+
+.navbar-brand {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mode-toggle {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 16px;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    opacity 0.2s ease;
+  opacity: 0.8;
+}
+
+.mode-toggle:hover {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+.mode-toggle:active {
+  transform: scale(0.98);
+}
+
+.mode-toggle svg {
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+
+.mode-label {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* Hint text */
+.hint {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  font-weight: 400;
+  opacity: 0.4;
+  letter-spacing: 0.3px;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Hide hint after first interaction */
+.app:active .hint {
+  opacity: 0;
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor {
+    display: none;
+  }
+
+  .hint {
+    bottom: 40px;
+    font-size: 14px;
+  }
+}
+
+/* Ensure smooth performance */
+@media (prefers-reduced-motion: reduce) {
+  .app,
+  .custom-cursor,
+  .navbar,
+  .mode-toggle {
+    transition: none;
+  }
+}
+
+/* Debug panel */
+.debug {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Hints panel */
+.hints {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.6;
+  pointer-events: none;
+}

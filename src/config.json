@@ -1,0 +1,22 @@
+{
+  "default": {
+    "h": 40,
+    "s": 5,
+    "l": 98
+  },
+  "storageKey": "backlite-color-v3",
+  "limits": {
+    "h": { "min": 0, "max": 360 },
+    "s": { "min": 3, "max": 60 },
+    "l": { "min": 20, "max": 98 }
+  },
+  "sensitivity": {
+    "hCyclesPerVW": 2.5,
+    "sCyclesPerVW": 3,
+    "lCyclesPerVH": 3
+  },
+  "deadzone": {
+    "x": 0,
+    "y": 0
+  }
+}
