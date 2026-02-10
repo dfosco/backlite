@@ -1,20 +1,20 @@
 # Backlite
 
-Your monitor called. It wants to be a ring light.
-
 Backlite turns your spare monitor into soft, customizable ambient lighting for video calls. Because nobody needs to see you lit by the cold, harsh glow of a blank browser tab.
+
+Chosen color is saved to browser storage and persisted between refreshes (wow).  
+
 
 ## How it works
 
-Open the website. Drag around. Colors change. That's it.
+Open the site, drag it around, colors change!
 
 - **Drag up/down** — brightness
 - **Drag left/right** — hue
-- **Cmd/Ctrl + drag left/right** — saturation
-- **Alt/Opt + L** — toggle lights on/off
-- **Cmd/Ctrl + Z** — undo (we save your last 15 mistakes)
+- **cmd/ctrl + drag left/right** — saturation
+- **opt/alt + L** — toggle lights on/off
+- **cmd/ctrl + Z** — undo
 
-Your color is saved automatically. Come back later, it's still there.
 
 ## Run locally
 
