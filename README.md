@@ -1,16 +1,34 @@
-# React + Vite
+# Backlite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Your monitor called. It wants to be a ring light.
 
-Currently, two official plugins are available:
+Backlite turns your spare monitor into soft, customizable ambient lighting for video calls. Because nobody needs to see you lit by the cold, harsh glow of a blank browser tab.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## How it works
 
-## React Compiler
+Open the website. Drag around. Colors change. That's it.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Drag up/down** — brightness
+- **Drag left/right** — hue
+- **Cmd/Ctrl + drag left/right** — saturation
+- **Alt/Opt + L** — toggle lights on/off
+- **Cmd/Ctrl + Z** — undo (we save your last 15 mistakes)
 
-## Expanding the ESLint configuration
+Your color is saved automatically. Come back later, it's still there.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+## License
+
+Do whatever you want with it. It's a colored rectangle.
