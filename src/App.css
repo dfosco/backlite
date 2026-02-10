@@ -79,12 +79,13 @@
   top: 16px;
   left: 16px;
   right: 16px;
-  height: 48px;
+  height: 56px;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  border-radius: 24px;
+  padding: 0 12px 0 20px;
+  border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.8);
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(2px) saturate(180%);
@@ -214,6 +215,9 @@
 
 /* Debug panel */
 .debug {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   position: fixed;
   bottom: 16px;
   right: 16px;
@@ -226,6 +230,9 @@
 
 /* Hints panel */
 .hints {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   position: fixed;
   bottom: 16px;
   left: 16px;
@@ -234,4 +241,14 @@
   line-height: 1.6;
   opacity: 0.6;
   pointer-events: none;
+}
+
+code {
+  background-color: rgba(0, 0, 0, 0.08);
+  padding: 2px 4px;
+  border-radius: 4px;
+
+  &.arrow {
+    font-size: 16px;
+  }
 }

@@ -3,19 +3,22 @@ import './App.css'
 import config from './config.json'
 
 const DEBUG = import.meta.env.DEV && import.meta.env.VITE_DEBUG === 'true'
+const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform)
 
 const DEFAULT_HSL = config.default
 const STORAGE_KEY = config.storageKey
+const HISTORY_KEY = `${config.storageKey}-history`
+const MAX_HISTORY = 15
 const { h: H_LIMITS, s: S_LIMITS, l: L_LIMITS } = config.limits
 const { hCyclesPerVW, sCyclesPerVW, lCyclesPerVH } = config.sensitivity
 const { x: X_DEADZONE, y: Y_DEADZONE } = config.deadzone
+const { darkThreshold, darkLightness, lightLightness } = config.mode
 
 function getStoredColor() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       const parsed = JSON.parse(stored)
-      // Validate stored values
       if (typeof parsed.h === 'number' && typeof parsed.s === 'number' && typeof parsed.l === 'number') {
         return parsed
       }
@@ -26,8 +29,54 @@ function getStoredColor() {
   return DEFAULT_HSL
 }
 
-function saveColor(hsl) {
+function getHistory() {
   try {
+    const stored = localStorage.getItem(HISTORY_KEY)
+    if (stored) {
+      const parsed = JSON.parse(stored)
+      if (Array.isArray(parsed)) {
+        return parsed
+      }
+    }
+  } catch {
+    // Ignore
+  }
+  return []
+}
+
+function saveHistory(history) {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history))
+  } catch {
+    // Ignore
+  }
+}
+
+function pushToHistory(hsl) {
+  const history = getHistory()
+  history.push(hsl)
+  // Keep only last MAX_HISTORY items
+  if (history.length > MAX_HISTORY) {
+    history.shift()
+  }
+  saveHistory(history)
+}
+
+function popFromHistory() {
+  const history = getHistory()
+  if (history.length === 0) return null
+  const previous = history.pop()
+  saveHistory(history)
+  return previous
+}
+
+function saveColor(hsl, addToHistory = true) {
+  try {
+    if (addToHistory) {
+      // Save current color to history before overwriting
+      const current = getStoredColor()
+      pushToHistory(current)
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(hsl))
   } catch {
     // Ignore
@@ -160,6 +209,43 @@ function App() {
     setCursorPos({ x: -100, y: -100 })
   }, [isDragging])
 
+  const isDarkMode = hsl.l < darkThreshold
+
+  const toggleMode = useCallback(() => {
+    const newL = isDarkMode ? lightLightness : darkLightness
+    const newHsl = { ...hslRef.current, l: newL }
+    hslRef.current = newHsl
+    setHsl(newHsl)
+    saveColor(newHsl)
+  }, [isDarkMode])
+
+  const undoChange = useCallback(() => {
+    const previous = popFromHistory()
+    if (previous) {
+      hslRef.current = previous
+      setHsl(previous)
+      saveColor(previous, false) // Don't add to history when undoing
+    }
+  }, [])
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Option/Alt + L to toggle lights
+      if (e.altKey && e.code === 'KeyL') {
+        e.preventDefault()
+        toggleMode()
+      }
+      // Cmd/Ctrl + Z to undo
+      if ((e.metaKey || e.ctrlKey) && e.code === 'KeyZ' && !e.shiftKey) {
+        e.preventDefault()
+        undoChange()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [toggleMode, undoChange])
+
   const bg = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`
   const textColor = hsl.l > 50 ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.6)'
   const glassBg = hsl.l > 50 ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.08)'
@@ -197,6 +283,34 @@ function App() {
         onMouseLeave={() => setIsOverNavbar(false)}
       >
         <div className="navbar-brand">Backlite</div>
+        <button
+          className="mode-toggle"
+          onClick={toggleMode}
+          style={{
+            backgroundColor: glassBg,
+            borderColor: glassBorder,
+            color: textColor,
+          }}
+        >
+          {isDarkMode ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          )}
+          <span className="mode-label">{isDarkMode ? 'Lights on' : 'Lights off'}</span>
+        </button>
       </nav>
       
         <div className="debug" style={{ color: textColor }}>
@@ -207,9 +321,11 @@ function App() {
         </div>
       
         <div className="hints" style={{ color: textColor }}>
-          <div>Drag up / down ↑ ↓ down to change brightness</div>
-          <div>Drag left / right to change hue</div>
-          <div>Hold <code>cmd</code> + drag left / right to change saturation</div>
+          <div><code className="arrow" aria-label="up and down">↑ ↓</code> drag to change brightness</div>
+          <div><code className="arrow" aria-label="left and right">← →</code> drag to change hue</div>
+          <div><code>{isMac ? '⌘ cmd' : 'Ctrl'}</code> + <code className="arrow" aria-label="left and right">← →</code> drag to change saturation</div>
+          <div><code>{isMac ? '⌥ opt' : 'Alt'}</code> + <code>L</code> to toggle lights</div>
+          <div><code>{isMac ? '⌘ cmd' : 'Alt'}</code> + <code>Z</code> to undo changes</div>
         </div>
       
     </div>

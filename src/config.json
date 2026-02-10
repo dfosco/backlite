@@ -18,5 +18,10 @@
   "deadzone": {
     "x": 0,
     "y": 0
+  },
+  "mode": {
+    "darkThreshold": 21,
+    "darkLightness": 20,
+    "lightLightness": 80
   }
 }
