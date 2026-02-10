@@ -7,21 +7,34 @@
   "storageKey": "backlite-color-v3",
   "limits": {
     "h": { "min": 0, "max": 360 },
-    "s": { "min": 3, "max": 60 },
+    "s": { "min": 3, "max": 40 },
     "l": { "min": 20, "max": 98 }
   },
   "sensitivity": {
-    "hCyclesPerVW": 2.5,
-    "sCyclesPerVW": 3,
-    "lCyclesPerVH": 3
+    "hCyclesPerVW": 2,
+    "sCyclesPerVW": 2,
+    "lCyclesPerVH": 2
   },
   "deadzone": {
-    "x": 0,
-    "y": 0
+    "x": 2.5,
+    "y": 2.5
   },
   "mode": {
     "darkThreshold": 21,
     "darkLightness": 20,
-    "lightLightness": 80
+    "lightLightness": 90
+  },
+  "keyboard": {
+    "h": { "step": 6, "shiftMultiplier": 6 },
+    "s": { "step": 10, "shiftMultiplier": 1 },
+    "l": { "step": 1, "shiftMultiplier": 10 }
+  },
+  "vignette": {
+    "min": 0,
+    "max": 1,
+    "sensitivity": 2,
+    "blurSize": 200,
+    "spreadSize": 100,
+    "baseLightness": 8
   }
 }

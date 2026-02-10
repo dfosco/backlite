@@ -2,9 +2,28 @@
   width: 100%;
   height: 100vh;
   position: relative;
-  transition: background-color 0.05s ease-out;
   user-select: none;
   -webkit-user-select: none;
+  font-family: 'JetBrains Mono', monospace;
+
+  /* Background with wide gamut support */
+  background-color: var(--bg-hsl);
+  background-color: var(--bg-oklch);
+  transition: background-color 0.05s ease-out;
+}
+
+/* Vignette overlay - uses opacity for GPU-accelerated animation */
+.vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 var(--vignette-blur, 200px) var(--vignette-spread, 100px) var(--vignette-color, hsl(0, 0%, 8%));
+  opacity: var(--vignette-opacity, 0);
+  z-index: 1;
+  will-change: opacity;
 }
 
 /* Custom cursor - liquid glass */
@@ -141,6 +160,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
   gap: 6px;
   cursor: pointer;
   backdrop-filter: blur(10px);
@@ -150,6 +170,10 @@
     transform 0.15s ease,
     opacity 0.2s ease;
   opacity: 0.8;
+}
+
+button {
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .mode-toggle:hover {
@@ -164,6 +188,24 @@
 .mode-toggle svg {
   opacity: 0.9;
   flex-shrink: 0;
+}
+
+/* Aperture icon rotation */
+.aperture-icon {
+  transition: transform 0.3s ease-out;
+}
+
+.aperture-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .mode-label {
@@ -208,8 +250,10 @@
   .app,
   .custom-cursor,
   .navbar,
-  .mode-toggle {
+  .mode-toggle,
+  .aperture-icon {
     transition: none;
+    animation: none;
   }
 }
 
@@ -221,10 +265,10 @@
   position: fixed;
   bottom: 16px;
   right: 16px;
-  font-family: monospace;
+
   font-size: 14px;
   line-height: 1.6;
-  opacity: 0.6;
+  opacity: 0.9;
   pointer-events: none;
 }
 
@@ -232,15 +276,59 @@
 .hints {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 12px;
   position: fixed;
   bottom: 16px;
   left: 16px;
-  font-family: monospace;
+
   font-size: 14px;
   line-height: 1.6;
-  opacity: 0.6;
+  opacity: 0.9;
+}
+
+.hints-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   pointer-events: none;
+}
+
+.hints-hidden {
+  pointer-events: none;
+}
+
+.hints-segmented {
+  display: flex;
+  flex-direction: row;
+  border-radius: 4px;
+  border: 1px solid;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.hints-segment {
+  height: 28px;
+  padding: 0 12px;
+  border: none;
+
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+  opacity: 0.9;
+}
+
+.hints-segment:hover {
+  opacity: 1;
+}
+
+.hints-segment.active {
+  opacity: 1;
 }
 
 code {

@@ -2,8 +2,7 @@
 
 Backlite turns your spare monitor into soft, customizable ambient lighting for video calls. Because nobody needs to see you lit by the cold, harsh glow of a blank browser tab.
 
-Chosen color is saved to browser storage and persisted between refreshes (wow).  
-
+Uses OKLCH colors with P3/wide gamut on supported browsers and monitors.
 
 ## How it works
 
