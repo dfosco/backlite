@@ -139,6 +139,39 @@
   filter: blur(1px) brightness(110%);
 }
 
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.github-link {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    opacity 0.2s ease;
+  opacity: 0.8;
+}
+
+.github-link:hover {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+.github-link:active {
+  transform: scale(0.98);
+}
+
 .navbar-brand {
   font-size: 16px;
   font-weight: 600;
