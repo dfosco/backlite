@@ -8,7 +8,9 @@ Uses OKLCH colors with P3/wide gamut on supported browsers and monitors.
 
 Open the site, drag it around, colors change!
 
-./readme/video.mp4
+https://github.com/dfosco/backlite/raw/refs/heads/main/.videos/video.mp4
+
+---
 
 - **Drag up/down** — brightness
 - **Drag left/right** — hue
